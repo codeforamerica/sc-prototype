@@ -1,6 +1,8 @@
-$sc-blue: #4A90E2;
+$sc-blue: #019C86;
 $sc-grey: #AAAAAA;
 $sc-light-grey: #EAEAE9;
+
+$fade-out: all .25s ease-out;
 
 html {
   margin: 0;
@@ -62,16 +64,23 @@ body {
 }
 
 .sc-nav {
+  h4 {
+    color: $sc-grey;
+    font-size: 12px;
+    margin-top: 6em;
+  }
+
   li {
-    margin-bottom: 1em;
+    margin-bottom: .5em;
     &.is-selected {
       a {
+        color: #fff;
         font-weight: 700;
       }
     }
   }
   a {
-    color: #fff;
+    color: $sc-light-grey;
     text-decoration: none;
   }
   .sc-badge {
@@ -140,7 +149,7 @@ body {
 }
 
 .sc-conversation__intro {
-  padding: 4em 1.5em;
+  padding: 3em 1.5em;
   
   h3 {
     text-align: center;
@@ -163,7 +172,43 @@ body {
   overflow: auto;
 }
 
+.sc-case-status {
+  text-align: center;
+  margin: 2em 0;
+  .sc-case-status__container {
+    display: inline-block;
+    margin-bottom: 0;
+    font-weight: 300;
+    max-width: 35em;
+    padding: .7em 1.5em;
+    background-color: #423A3E;
+    color: #FFF;
+    box-shadow: 0px 1px 3px rgba(#000, .33);
+    border-radius: 25px;
+    font-size: 12px;
+  }
+
+  + .sc-case-status {
+    margin-top: -1.5em;
+  }
+}
+
+.sc-case-status__pathway--purple {
+  font-weight: 700;
+}
+
+.sc-case-status__status--created {
+  font-weight: 700;
+  color: #7ED321;
+}
+
+.sc-case-status__status--pended {
+  font-weight: 700;
+  color: #F5A623;
+}
+
 .sc-date-marker {
+  margin-top: 2em;
   position: relative;
   text-align: center;
 
@@ -194,35 +239,24 @@ body {
 }
 
 .sc-message--you {
+  transition: $fade-out;
   justify-content: flex-end;
   .sc-message__avatar {
     order: 2;
   }
   .sc-message__bubble {
+    transition: $fade-out;
     margin-right: 1em;
     margin-left: 0;
-    background-color: $sc-blue;
+    background-color: rgba($sc-blue, 1);
     color: #fff;
-  }
-}
-
-.sc-message--unsent {
-  justify-content: flex-end;
-  .sc-message__avatar {
-    order: 2;
-  }
-  .sc-message__bubble {
-    margin-right: 1em;
-    margin-left: 0;
-    background-color: rgba($sc-blue, .15);
-    margin-bottom: 4em;
   }
 
   .sc-message__actions {
-    position: relative;
-    top: 1em;
-    margin-bottom: -1.5em;
-    display: flex;
+    transition: $fade-out;
+    visibility: hidden;
+    pointer-events: none;
+    height: 0;
   }
 
   .sc-message__actions-left {
@@ -230,24 +264,90 @@ body {
   }
 
   .sc-message__approve, .sc-message__deny, .sc-message__edit {
-    display: inline-block;
-    border-radius: 50%;
-    margin: 0 .5em;
-    text-indent: -9999px;
-    height: 50px;
-    width: 50px;
-    background-color: #fff;
-    box-shadow: 0px 2px 5px rgba(#000, .15);
+    display: none;
   }
 
-  .sc-message__deny {
-    background-color: #FF001F;
-  }
+  &.sc-message--unsent {
+    .sc-message__bubble {
+      margin-right: 1em;
+      margin-left: 0;
+      background-color: rgba($sc-blue, .15);
+      margin-bottom: 4em;
+      color: #000;
+    }
 
-  .sc-message__approve {
-    background-color: #7ED321;
+    .sc-message__actions {
+      visibility: visible;
+      pointer-events: all;
+      height: 50px;
+      position: relative;
+      top: 1em;
+      margin-bottom: -1.5em;
+      display: flex;
+    }
+
+    .sc-message__approve, .sc-message__deny, .sc-message__edit {
+      display: inline-block;
+    }
   }
 }
+
+.sc-message__approve, .sc-message__deny, .sc-message__edit {
+  display: inline-block;
+  position: relative;
+  border-radius: 50%;
+  margin: 0 .5em;
+  text-indent: -9999px;
+  height: 50px;
+  width: 50px;
+  background-color: #fff;
+  box-shadow: 0px 2px 5px rgba(#000, .15);
+  &:before {
+    content: '';
+    position: absolute;
+    display: block;
+    top: 50%;
+    left: 50%;
+    background-repeat: no-repeat;
+    background-position: center center;
+  }
+}
+
+.sc-message__deny {
+  background-color: #FF001F;
+  &:before {
+    height: 20px;
+    width: 20px;
+    margin-left: -10px;
+    margin-top: -10px;
+    background-image: url('../images/icon_deny.png');
+    background-size: 20px 20px;
+  }
+}
+
+.sc-message__approve {
+  background-color: #7ED321;
+  &:before {
+    height: 18px;
+    width: 24px;
+    margin-left: -12px;
+    margin-top: -9px;
+    background-image: url('../images/icon_approve.png');
+    background-size: 24px 18px;
+  }
+}
+
+.sc-message__edit {
+  &:before {
+    height: 20px;
+    width: 20px;
+    margin-left: -10px;
+    margin-top: -10px;
+    background-image: url('../images/icon_edit.png');
+    background-size: 20px 20px;
+  }
+}
+
 
 .sc-message__avatar {
   width: 50px;
@@ -321,4 +421,5 @@ body {
   padding: 0 1em;
   font-size: 12px;
   border-radius: 12px;
+  font-weight: 700;
 }
